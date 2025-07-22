@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Louvre from './pages/Louvre';
-/* import British from './pages/British'; */
+import British from './pages/British';
 import About from './pages/About';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/louvre" element={<Louvre />} />
-            {/* <Route path="/british" element={<British />} /> */}
+            <Route path="/british" element={<British />} />
             <Route path="/about" element={<About />} />
           </Routes>
         </main>

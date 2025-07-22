@@ -1,27 +1,37 @@
-import React from 'react';
-import './BritishMuseum.scss';
+import './Louvre.scss';
+import { louvreArtworks } from '../data/louvreArtworks';
+import { Link } from 'react-router-dom';
 
-const BritishMuseum = () => {
+const Louvre = () => {
   return (
-    <div className="main1">
-      <div className="video-container1">
-        <iframe
+    <div className="louvre">
+      <div className="video-container">
+        <video
           className="main-video"
-          width="100%"
-          height="100%"
-          src="https://www.youtube.com/embed/r0UdSk08vQo?autoplay=1&mute=1&loop=1&playlist=r0UdSk08vQo"
-          title="We found French Underwear in an Ancient Sumerian City"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        ></iframe>
+          src="https://api-www.louvre.fr/sites/default/files/2024-04/cover-w1920-h600-scaled.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="video-overlay-text">
+          <h1>Réservation obligatoire - Été 2025</h1>
+        </div>
+      </div>
 
-        {/* <div className="video-overlay-text">
-          <h1>Curator's Corner – British Museum</h1>
-        </div> */}
+      <div className="main_section">
+        <section className="gallery">
+          {louvreArtworks.map((art) => (
+            <Link to={`/artwork/${art.id}`} key={art.id} className="galleryItem">
+              <img src={art.image} alt={art.title} />
+              <h3>{art.title}</h3>
+              <p>{art.info}</p>
+            </Link>
+          ))}
+        </section>
       </div>
     </div>
   );
 };
 
-export default BritishMuseum;
+export default Louvre;
