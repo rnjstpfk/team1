@@ -353,7 +353,12 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(18, 24, 42, 0.95); // 반투명 네이비
+  background: radial-gradient(
+    closest-side,
+    #212A38 0%,    // 중앙 진한 네이비
+    #182032 40%,   // 중간 어두운 블루
+    #0E1824 100%   // 끝쪽 더 어두운 블루블랙
+  );
   color: #fff;
   z-index: 999;
   overflow-y: auto;
@@ -384,6 +389,7 @@
       margin-bottom: 30px;
       border-bottom: 1px solid #fff;
       width: 200px;
+      margin-left: 20px;
     }
 
     .about-content {

@@ -38,6 +38,7 @@ const Header = () => {
         setMenuOpen(false);
     };
 
+    const searchButtonRef = useRef();
 
 
 
@@ -54,19 +55,26 @@ const Header = () => {
 
     useEffect(() => {
         const handleClickOutside = (e) => {
+            const isInsideSearch = searchRef.current && searchRef.current.contains(e.target);
+            const isSearchButton = searchButtonRef.current && searchButtonRef.current.contains(e.target);
+
+            if (searchOpen && !isInsideSearch && !isSearchButton) {
+                setSearchOpen(false);
+            }
+
             if (menuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
                 setMenuOpen(false);
             }
+
             if (loginOpen && loginRef.current && !loginRef.current.contains(e.target)) {
                 setLoginOpen(false);
             }
-            if (searchOpen && searchRef.current && !searchRef.current.contains(e.target)) {
-                setSearchOpen(false);
-            }
         };
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [menuOpen, loginOpen, searchOpen]);
+
 
     return (
         <>
@@ -83,7 +91,7 @@ const Header = () => {
                     <button title="회원가입" className="icon-button" onClick={toggleLogin}>
                         <IoPerson className="icon" />
                     </button>
-                    <button title="검색" className="icon-button" onClick={toggleSearch}>
+                    <button title="검색" className="icon-button" onClick={toggleSearch} ref={searchButtonRef} >
                         <FaSearch className="icon" />
                     </button>
                 </div>
@@ -101,7 +109,7 @@ const Header = () => {
                     <button className="search-close" onClick={clearSearch}>×</button>
                 </div>
             )}
-
+            {/* 메뉴 */}
             {menuOpen && (
                 <div className="menu-overlay" ref={menuRef}>
                     <button className="close-button" onClick={toggleMenu}>×</button>
@@ -127,7 +135,7 @@ const Header = () => {
                     </div>
                 </div>
             )}
-
+            {/* 회원가입 */}
             {loginOpen && (
                 <div className="login-panel" ref={loginRef}>
                     <button className="close-button" onClick={toggleLogin}>×</button>

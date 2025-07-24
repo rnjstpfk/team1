@@ -1,6 +1,7 @@
 import React from 'react';
 import './Home.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
 const Home = () => {
@@ -20,7 +21,16 @@ const Home = () => {
 
             {/* ✅ Swiper 영역 */}
             <div className="swiper-container">
-                <Swiper spaceBetween={20} slidesPerView={2} loop={true}>
+                <Swiper
+                    spaceBetween={20}
+                    slidesPerView={2}
+                    loop={true}
+                    autoplay={{
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    }}
+                    modules={[Autoplay]}
+                >
                     <SwiperSlide>
                         <div className="slide-card">
                             <img src={`${process.env.PUBLIC_URL}/img/home_swiper1.png`} alt="슬라이드 1" />
@@ -43,6 +53,7 @@ const Home = () => {
                     </SwiperSlide>
                 </Swiper>
             </div>
+
 
         </div>
     );
