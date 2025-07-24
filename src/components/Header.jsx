@@ -4,6 +4,9 @@ import { FaSearch } from 'react-icons/fa';
 import { IoPerson } from 'react-icons/io5';
 import './Header.scss';
 
+
+
+
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
@@ -22,6 +25,21 @@ const Header = () => {
     };
     const toggleSearch = () => setSearchOpen(prev => !prev);
     const clearSearch = () => setSearchText('');
+    //모달
+    const [aboutOpen, setAboutOpen] = useState(false);
+    //메뉴 자동 닫힘
+    const handleMenuLinkClick = () => {
+        setMenuOpen(false);
+        window.scrollTo(0, 0); // ⬅ 페이지 이동 후 스크롤 맨 위로
+    };
+    //about
+    const openAboutModal = () => {
+        setAboutOpen(true);
+        setMenuOpen(false);
+    };
+
+
+
 
     useEffect(() => {
         if (menuOpen || loginOpen) {
@@ -58,7 +76,7 @@ const Header = () => {
                 </div>
                 <div className="header-center">
                     <Link to="/" className="site-title">
-                        <h1>Archive Musée</h1>
+                        <img src="/img/logo1.png" alt="logo" />
                     </Link>
                 </div>
                 <div className="header-right">
@@ -91,19 +109,21 @@ const Header = () => {
                         <ul className="menu-list">
                             <li>MUSEUMS
                                 <ul>
-                                    <li><Link to="/louvre">루브르 (LOUVRE)</Link></li>
-                                    <li><Link to="/british">대영 박물관 (BRITISH)</Link></li>
-                                    <li><Link to="/ERMITAGE">에르미타주 박물관</Link></li>
-                                    <li><Link to="/VATICAN">바티칸 박물관</Link></li>
-                                    <li><Link to="/MET">메트로폴리탄 미술관 (THE MET)</Link></li>
+                                    <li><Link to="/louvre" onClick={handleMenuLinkClick}>루브르 (LOUVRE)</Link></li>
+                                    <li><Link to="/british" onClick={handleMenuLinkClick}>대영 박물관 (BRITISH)</Link></li>
+                                    <li><Link to="/ermitage" onClick={handleMenuLinkClick}>에르미타주 박물관</Link></li>
+                                    <li><Link to="/VATICAN" onClick={handleMenuLinkClick}>바티칸 박물관</Link></li>
+                                    <li><Link to="/MET" onClick={handleMenuLinkClick}>메트로폴리탄 미술관 (THE MET)</Link></li>
                                 </ul>
                             </li>
-                            <li><Link to="/exhibitions">특별전시(EXHIBITIONS)</Link></li>
-                            <li><Link to="/education">교육 및 자료 (EDUCATION & RESOURCES)</Link></li>
+                            <li><Link to="/exhibitions" onClick={handleMenuLinkClick}>특별전시(EXHIBITIONS)</Link></li>
+                            <li><Link to="/education" onClick={handleMenuLinkClick}>교육 및 자료 (EDUCATION & RESOURCES)</Link></li>
                         </ul>
                         <div className="menu-bottom">
-                            <Link to="/about">ABOUT</Link>
+                            <button onClick={openAboutModal}>ABOUT</button>
+
                         </div>
+
                     </div>
                 </div>
             )}
@@ -142,6 +162,44 @@ const Header = () => {
                     </div>
                 </div>
             )}
+
+            {/* 모달 */}
+            {aboutOpen && (
+                <div className="about-modal">
+
+                    <div className="about-page">
+                        <button className="close-button" onClick={() => setAboutOpen(false)}>×</button>
+                        <div className="about-header">
+                            <h1>ABOUT</h1>
+                        </div>
+
+                        <div className="about-content">
+                            <div className="about-image">
+                                <img src="/img/about-image.png" alt="About Archive Musee" />
+                            </div>
+                            <div className="about-text">
+                                <p>
+                                    Archive Musée는 세계 유수의 박물관에서 엄선한 명작들을 모아놓은 디지털 아카이브입니다.<br />
+                                    우리의 사명은 누구나 언제 어디서나 인류의 시각적 역사를 탐색하고, 감상하고,<br />
+                                    배우도록 예술과 문화유산에 대한 열린 접근을 제공하는 것입니다.<br />
+                                    우리는 예술이 시간과 국경을 초월하는 보편적 언어라 믿습니다.<br />
+                                    여러분이 단순한 관람자도, 학생이어도, 예술 애호가든<br />
+                                    Archive Musée는 전 세계의 위대한 컬렉션을 한곳에서 접할 수 있는 관문이 될 것입니다.
+                                </p>
+                                <p className="en">
+                                    Archive Musée is a digital archive of masterpieces<br />
+                                    from the world’s leading museums.<br />
+                                    We provide open access to art and cultural heritage,<br />
+                                    allowing users to explore and learn from humanity’s visual history — anytime, anywhere.<br />
+                                    Art transcends time and borders, and through this platform,<br />
+                                    we make significant artworks more accessible to all.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </>
     );
 };

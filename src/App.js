@@ -5,7 +5,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Louvre from './pages/Louvre';
 import British from './pages/British';
-import About from './pages/About';
+import Ermitage from './pages/Ermitage';
+/* import About from './pages/About'; */
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/louvre" element={<Louvre />} />
             <Route path="/british" element={<British />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/ermitage" element={<Ermitage />} />
+            {/* <Route path="/about" element={<About />} /> */}
           </Routes>
         </main>
         <Footer />

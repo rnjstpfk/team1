@@ -4,7 +4,7 @@
   justify-content: space-between;
   padding: 15px 30px;
   background-color: #2F3837;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   height: 60px;
 
   .logo {
@@ -12,12 +12,16 @@
     filter: brightness(0) invert(1);
   }
 
-  .site-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #ffffff;
-    margin: 0;
-    font-family: 'Abhaya Libre', serif;
+  .header-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .site-title img {
+      height: 700px; // 원하는 크기로 조정
+      margin-top: 10px;
+    }
   }
 
   .header-right {
@@ -26,7 +30,7 @@
     gap: 20px;
 
     .icon {
-      font-size: 20px;
+      font-size: 23px;
       color: #ffffff;
       cursor: pointer;
     }
@@ -127,8 +131,11 @@
         padding-left: 15px;
         display: none;
       }
-      &:hover{
-        ul{display: block;}
+
+      &:hover {
+        ul {
+          display: block;
+        }
       }
     }
 
@@ -139,11 +146,36 @@
       &:hover {
         text-decoration: underline;
       }
-    } 
+    }
   }
-  .menu-bottom{
-    margin-top: 800px;
+
+  .menu-bottom {
+    position: absolute;
+    bottom: 220px;
+    left: 20px;
     font-weight: bold;
+
+    button {
+      padding: 10px 24px;
+      font-size: 16px;
+      background: none; // 기본 흰 배경
+      color: #12182A; // 네이비 텍스트
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+
+      &:hover {
+        background-color: #12182A; // 반전
+        color: #fff;
+      }
+
+      &:active {
+        transform: scale(0.97);
+      }
+    }
+
   }
 }
 
@@ -204,6 +236,7 @@
 
     p {
       font-size: 14px;
+
       button {
         background: none;
         border: none;
@@ -231,6 +264,7 @@
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -296,8 +330,8 @@
   height: 130px;
   background-color: #524838; // 원하는 배경색으로 변경 가능
   display: flex;
-  justify-content: center;  // 수평 가운데
-  align-items: center;      // 수직 가운데
+  justify-content: center; // 수평 가운데
+  align-items: center; // 수직 가운데
   text-align: center;
 
   p {
@@ -310,3 +344,77 @@
 }
 
 
+
+
+//모달창
+.about-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(18, 24, 42, 0.95); // 반투명 네이비
+  color: #fff;
+  z-index: 999;
+  overflow-y: auto;
+  padding: 60px 40px;
+
+
+
+  .about-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+
+    .close-button {
+      position: absolute;
+      top: -40px; // 페이지 상단보다 위
+      right: 0;
+      font-size: 32px;
+      background: none;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .about-header h1 {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #fff;
+      width: 200px;
+    }
+
+    .about-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+
+      .about-image {
+        flex: 1;
+        min-width: 300px;
+        max-width: 400px;
+
+        img {
+          width: 100%;
+          border-radius: 10px;
+        }
+      }
+
+      .about-text {
+        flex: 1;
+        max-width: 550px;
+        font-size: 16px;
+        line-height: 1.8;
+
+        .en {
+          margin-top: 20px;
+          color: #ccc;
+        }
+      }
+
+    }
+  }
+}
