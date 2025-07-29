@@ -6,9 +6,18 @@ const Louvre = () => {
     return (
         <div className="louvre">
             <div className="video-container">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/r0UdSk08vQo" title="We found French Underwear in an Ancient Sumerian City | Girsu Project | Curator&#39;s Corner S10 Ep4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe
+                    width="100%"
+                    height="100%"
+                    src="https://www.youtube.com/embed/IhoVSzEGIcM"
+                    title="Louvre Museum Video"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                ></iframe>
                 <div className="video-overlay-text">
-                    <h1>Réservation obligatoire - Été 2025</h1>
+                    {/* <h1>Réservation obligatoire - Été 2025</h1> */}
                 </div>
             </div>
 

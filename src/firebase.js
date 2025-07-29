@@ -1,15 +1,18 @@
-// src/firebase.js
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { initializeApp, getApps } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_PROJECT.firebaseapp.com',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_PROJECT.appspot.com',
-  messagingSenderId: 'YOUR_SENDER_ID',
-  appId: 'YOUR_APP_ID',
+  apiKey: "AIzaSyBDEo5fBWwPyEQa31U6GEzpwLyrJFqvXOU",
+  authDomain: "team1-2c9b9.firebaseapp.com",
+  projectId: "team1-2c9b9",
+  storageBucket: "team1-2c9b9.appspot.com",
+  messagingSenderId: "2335568031",
+  appId: "1:2335568031:web:381abd9c495781826f72aa"
 };
 
-const app = initializeApp(firebaseConfig);
+// ✅ 이미 초기화된 앱이 있으면 재사용
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+
 export const auth = getAuth(app);
+export const db = getFirestore(app);

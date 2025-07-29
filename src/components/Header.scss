@@ -10,6 +10,9 @@
   .logo {
     height: 30px;
     filter: brightness(0) invert(1);
+    @media (max-width: 768px){
+        height: 24px;
+      }
   }
 
   .header-center {
@@ -21,6 +24,10 @@
     .site-title img {
       height: 700px; // 원하는 크기로 조정
       margin-top: 10px;
+      @media (max-width: 768px){
+        height: 400px;
+        margin-left: 15px;
+      }
     }
   }
 
@@ -33,6 +40,9 @@
       font-size: 23px;
       color: #ffffff;
       cursor: pointer;
+      @media (max-width: 768px){
+        font-size: 20px;
+      }
     }
 
     .icon-button {
@@ -53,7 +63,6 @@
   align-items: center;
   padding: 0 20px;
   position: relative;
-
   input {
     flex: 1;
     height: 50px;
@@ -90,6 +99,15 @@
 }
 
 
+//로그인
+.error-text {
+  color: #ff4d4f;
+  font-size: 13px;
+  margin-bottom: 8px;
+  background: rgba(255, 0, 0, 0.08);
+  padding: 5px 8px;
+  border-radius: 3px;
+}
 
 
 
@@ -346,6 +364,7 @@
 
 
 
+
 //모달창
 .about-modal {
   position: fixed;
@@ -355,32 +374,57 @@
   height: 100vh;
   background: radial-gradient(
     closest-side,
-    #212A38 0%,    // 중앙 진한 네이비
-    #182032 40%,   // 중간 어두운 블루
-    #0E1824 100%   // 끝쪽 더 어두운 블루블랙
+    #212A38 0%,
+    #182032 40%,
+    #0E1824 100%
   );
   color: #fff;
   z-index: 999;
+
+  /* ✅ 스크롤 개선 */
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;   // ✅ iOS 스크롤 부드럽게
+  scroll-behavior: smooth;             // ✅ 스크롤 부드럽게
+
   padding: 60px 40px;
 
-
+  /* ✅ 스크롤바 커스터마이징 */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
 
   .about-page {
     max-width: 1000px;
     margin: 0 auto;
     position: relative;
+    padding-bottom: 50px;  // ✅ 스크롤 끝에서 여유
 
     .close-button {
-      position: absolute;
-      top: -40px; // 페이지 상단보다 위
-      right: 0;
+      position: sticky;   // ✅ 스크롤 시 따라다니도록 변경
+      top: 10px;
+      right: 10px;
+      float: right;
       font-size: 32px;
       background: none;
       color: #fff;
       border: none;
       cursor: pointer;
       z-index: 1001;
+
+      &:hover {
+        color: #ff4d4f;
+        transform: scale(1.1);
+      }
     }
 
     .about-header h1 {
@@ -420,7 +464,49 @@
           color: #ccc;
         }
       }
-
     }
   }
+
+  /* ✅ 모바일 스크롤 최적화 */
+  @media (max-width: 768px) {
+    padding: 30px 15px;
+
+    .about-page {
+      .about-header h1 {
+        font-size: 32px;
+        text-align: center;
+        width: auto;
+        margin-left: 0;
+      }
+
+      .about-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+
+        .about-image {
+          max-width: 90%;
+        }
+
+        .about-text {
+          max-width: 90%;
+          font-size: 14px;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+/* ✅ 검색창 애니메이션 효과 */
+.search-bar {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ✅ 검색창이 열릴 때 부드럽게 표시 */
+.search-bar.search-open {
+  opacity: 1;
+  transform: translateY(0);
 }
