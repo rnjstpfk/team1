@@ -24,7 +24,12 @@ const Met = () => {
             <div className="main_section">
                 <section className="gallery">
                     {metArtworks.map((art) => (
-                        <Link to={`/artwork/${art.id}`} key={art.id} className="galleryItem">
+                        <Link
+                            to={`/met/artwork/${art.id}`}   // ✅ URL에 museum 포함
+                            state={{ from: "/met" }}        // ✅ 뒤로가기 시 /met으로 이동
+                            key={art.id}
+                            className="galleryItem"
+                        >
                             <img src={art.image} alt={art.title} />
                             <h3>{art.title}</h3>
                             <p>{art.info}</p>

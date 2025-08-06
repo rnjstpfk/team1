@@ -86,7 +86,57 @@ const Header = () => {
   const openAboutModal = () => { setAboutOpen(true); setMenuOpen(false); };
 
   // ✅ Firebase 로그인/회원가입 처리
-  const handleAuth = async (e) => { /* (생략: 기존 코드 그대로 유지) */ };
+  const handleAuth = async (e) => {
+  e.preventDefault();
+  try {
+    if (isSignup) {
+      if (password !== confirmPassword) {
+        setAuthError('❌ 비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const newUser = userCredential.user;
+
+      await setDoc(doc(db, 'users', newUser.uid), {
+        username,
+        email: newUser.email,
+        createdAt: new Date(),
+      });
+
+      alert('✅ 회원가입이 완료되었습니다! 로그인 후 이용하세요.');
+    } else {
+      await signInWithEmailAndPassword(auth, email, password);
+      alert('✅ 로그인 성공!');
+    }
+
+    setAuthError('');
+    setLoginOpen(false);
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+
+  } catch (err) {
+    const code = err.code;
+    if (code === 'auth/email-already-in-use') {
+      setAuthError('⚠️ 이미 가입된 이메일입니다. 로그인 해주세요.');
+      setIsSignup(false);
+    } else if (code === 'auth/invalid-email') {
+      setAuthError('❌ 이메일 형식이 잘못되었습니다.');
+    } else if (code === 'auth/weak-password') {
+      setAuthError('❌ 비밀번호는 6자 이상이어야 합니다.');
+    } else if (code === 'auth/user-not-found') {
+      setAuthError('⚠️ 계정이 존재하지 않습니다. 회원가입 해주세요.');
+      setIsSignup(true);
+    } else if (code === 'auth/wrong-password') {
+      setAuthError('❌ 비밀번호가 틀렸습니다.');
+    } else {
+      setAuthError(`❌ 오류가 발생했습니다: ${err.message}`);
+    }
+  }
+};
+
 
   const handleLogout = async () => { await signOut(auth); alert('🚪 로그아웃 완료'); };
 

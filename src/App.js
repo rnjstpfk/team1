@@ -13,6 +13,7 @@ import British from './pages/British';
 import Ermitage from './pages/Ermitage';
 import Vatican from './pages/Vatican';
 import Met from './pages/Met';
+import ArtworkDetail from './pages/ArtworkDetail';
 // import About from './pages/About';
 
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="/vatican" element={<Vatican />} />
             <Route path="/met" element={<Met />} />
             {/* <Route path="/about" element={<About />} /> */}
+            <Route path="/:museum/artwork/:id" element={<ArtworkDetail />} />
           </Routes>
         </main>
         <Footer />

@@ -21,7 +21,13 @@ const British = () => {
             <div className="main_section">
                 <section className="gallery">
                     {britishArtworks.map((art) => (
-                        <Link to={`/artwork/${art.id}`} key={art.id} className="galleryItem">
+                        <Link
+                            to={`/british/artwork/${art.id}`}
+                            state={{ from: "/british" }}
+                            key={art.id}
+                            className="galleryItem"
+                        >
+
                             <img src={art.image} alt={art.title} />
                             <h3>{art.title}</h3>
                             <p>{art.info}</p>
