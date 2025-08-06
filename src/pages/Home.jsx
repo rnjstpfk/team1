@@ -13,17 +13,18 @@ const Home = () => {
                 className="home-img"
             />
             <h1>
-                Alexandre Brun – <br />
-                View of the Salon Carré <br />
-                <span className="underline">at the Louvre</span>
+                Archive Musée –  <br />
+                An archive of timeless <br />
+                <span className="underline">masterpieces</span>
             </h1>
+            <p>03164  서울 종로구 종로2가 9  COPYRIGHT ⓒ 2025 Archive Musée. ALL RIGHTS RESERVED.</p>
 
 
             {/* ✅ Swiper 영역 */}
             <div className="swiper-container">
                 <Swiper
-                    spaceBetween={20}
-                    slidesPerView={2}
+                    spaceBetween={100}
+                    slidesPerView={3}
                     loop={true}
                     autoplay={{
                         delay: 3000,
