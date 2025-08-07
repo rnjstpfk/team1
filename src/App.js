@@ -15,6 +15,7 @@ import Vatican from './pages/Vatican';
 import Met from './pages/Met';
 import Exhibitions from './pages/Exhibitions';
 import ArtworkDetail from './pages/ArtworkDetail';
+import Education from './pages/Education';
 
 //위로 올라가는 버튼
 import ScrollToTopButton from './components/ScrollToTopButton';
@@ -54,6 +55,7 @@ function App() {
             <Route path="/met" element={<Met />} />
             {/* <Route path="/about" element={<About />} /> */}
             <Route path="/:museum/artwork/:id" element={<ArtworkDetail />} />
+            <Route path="/education" element={<Education />} />
             
           </Routes>
           

@@ -7,11 +7,11 @@
   border: none;
   border-radius: 50%;
   padding: 14px;
-  font-size: 20px;
+  font-size: 16x;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
   z-index: 9999;
-  opacity: 0;
+  opacity: 0; 
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
 

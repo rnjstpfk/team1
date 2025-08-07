@@ -1,5 +1,7 @@
 import './Exhibitions.scss';
 
+import LikeButton from "../components/LikeButton"; // 상단에 추가
+
 // ✅ artworks 데이터만 불러오기
 import louvreArtworks from '../data/louvreArtworks';
 import britishArtworks from '../data/britishArtworks';
@@ -14,6 +16,7 @@ const museums = [
   { name: '바티칸', key: 'vatican', artworks: vaticanArtworks },
   { name: '메트로폴리탄', key: 'met', artworks: metArtworks },
 ];
+
 
 const Exhibitions = () => {
   return (

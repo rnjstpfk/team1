@@ -2,6 +2,7 @@ import './Louvre.scss';
 import { louvreArtworks } from '../data/louvreArtworks';
 import { Link } from 'react-router-dom';
 
+
 const Louvre = () => {
   return (
     <div className="louvre">

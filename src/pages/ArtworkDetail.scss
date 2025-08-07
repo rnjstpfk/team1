@@ -1,3 +1,5 @@
+ArtworkDetail.SCSS
+
 /* ✅ 페이지 전체 배경색 적용 */
 body {
   background: #DAE3DC;   // 기존 톤과 동일
@@ -59,9 +61,9 @@ body {
     line-height: 1.8;
     color: #444;
     text-align: center;
-    /* background: rgba(255, 255, 255, 0.7); */
     padding: 15px 20px;
     border-radius: 8px;
+    white-space: pre-line; // ✅ 줄바꿈 적용
   }
 }
 

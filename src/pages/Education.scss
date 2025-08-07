@@ -1,0 +1,152 @@
+.museum-name-above {
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-decoration: underline;
+  color: #222;
+  text-align: left;
+  margin-left: 0;
+}
+.museum-video-outer {
+  width: 100%;
+  min-height: 400px;
+  background: #2d2323;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  margin: 0 auto;
+  max-width: 98%;
+}
+.museum-video-frame {
+  width: 90%;
+  max-width: 640px;
+  background: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: none;
+  padding: 0;
+}
+
+// 전체 배경 및 폰트
+.education-page {
+  background: #e6f0ea;
+  min-height: 100vh;
+  padding: 0 0 60px 0;
+  font-family: 'Noto Sans KR', 'Arial', sans-serif;
+}
+
+.education-title {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin: 0;
+  padding: 48px 0 32px 0;
+  letter-spacing: 1px;
+}
+
+.education-museum-list {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.museum-section {
+  padding: 36px 0 24px 0;
+}
+
+.museum-divider {
+  border: none;
+  border-top: 2px solid #444;
+  margin: 36px 0 0 0;
+}
+
+.museum-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+}
+.row-normal {
+  flex-direction: row;
+}
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.museum-video-box {
+  flex: 1 1 380px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 320px;
+  max-width: 600px;
+}
+.museum-video-frame {
+  width: 100%;
+  background: #3a2f2f;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
+  overflow: hidden;
+  padding: 0;
+}
+
+.museum-resource-list {
+  flex: 1 1 320px;
+  min-width: 220px;
+  max-width: 420px;
+  padding: 0 12px;
+}
+.museum-name {
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-decoration: underline;
+  color: #222;
+}
+.museum-resources {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.resource-item {
+  background: #f7f7f7;
+  border-radius: 7px;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #222;
+  font-weight: 500;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background 0.18s, border 0.18s, color 0.18s;
+  text-align: left;
+  white-space: pre-line;
+}
+.resource-item.selected {
+  background: #d1e2d6;
+  border: 2px solid #222;
+  color: #111;
+  font-weight: 700;
+}
+.resource-item:hover {
+  background: #e6f0ea;
+  color: #111;
+}
+
+@media (max-width: 900px) {
+  .museum-row {
+    flex-direction: column !important;
+    gap: 18px;
+  }
+  .museum-video-box, .museum-resource-list {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+
+.education-page{
+    h1{text-align: center;}
+}
