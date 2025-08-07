@@ -73,6 +73,38 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuOpen, loginOpen, searchOpen]);
 
+
+// ✅ 스크롤 시 메뉴, 검색창 닫기
+useEffect(() => {
+  const handleScroll = () => {
+    // 🔍 검색창 닫기
+    if (searchOpen) {
+      setClosing(true);
+      setTimeout(() => {
+        setSearchOpen(false);
+        setClosing(false);
+      }, 300);
+    }
+
+    // 📌 메뉴 닫기
+    if (menuOpen) {
+      setMenuOpen(false);
+    }
+
+    // (선택) 로그인, about도 닫을 수 있음
+    // if (loginOpen) setLoginOpen(false);
+    // if (aboutOpen) setAboutOpen(false);
+  };
+
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, [searchOpen, menuOpen]);  // ✅ menuOpen 꼭 추가!
+
+
+
+
+
+
   // ✅ 메뉴/로그인/검색 토글
   const toggleMenu = () => setMenuOpen(prev => !prev);
   const toggleLogin = () => { setLoginOpen(prev => !prev); setIsSignup(false); setAuthError(''); };
@@ -87,55 +119,55 @@ const Header = () => {
 
   // ✅ Firebase 로그인/회원가입 처리
   const handleAuth = async (e) => {
-  e.preventDefault();
-  try {
-    if (isSignup) {
-      if (password !== confirmPassword) {
-        setAuthError('❌ 비밀번호가 일치하지 않습니다.');
-        return;
+    e.preventDefault();
+    try {
+      if (isSignup) {
+        if (password !== confirmPassword) {
+          setAuthError('❌ 비밀번호가 일치하지 않습니다.');
+          return;
+        }
+
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const newUser = userCredential.user;
+
+        await setDoc(doc(db, 'users', newUser.uid), {
+          username,
+          email: newUser.email,
+          createdAt: new Date(),
+        });
+
+        alert('✅ 회원가입이 완료되었습니다! 로그인 후 이용하세요.');
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert('✅ 로그인 성공!');
       }
 
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const newUser = userCredential.user;
+      setAuthError('');
+      setLoginOpen(false);
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
 
-      await setDoc(doc(db, 'users', newUser.uid), {
-        username,
-        email: newUser.email,
-        createdAt: new Date(),
-      });
-
-      alert('✅ 회원가입이 완료되었습니다! 로그인 후 이용하세요.');
-    } else {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert('✅ 로그인 성공!');
+    } catch (err) {
+      const code = err.code;
+      if (code === 'auth/email-already-in-use') {
+        setAuthError('⚠️ 이미 가입된 이메일입니다. 로그인 해주세요.');
+        setIsSignup(false);
+      } else if (code === 'auth/invalid-email') {
+        setAuthError('❌ 이메일 형식이 잘못되었습니다.');
+      } else if (code === 'auth/weak-password') {
+        setAuthError('❌ 비밀번호는 6자 이상이어야 합니다.');
+      } else if (code === 'auth/user-not-found') {
+        setAuthError('⚠️ 계정이 존재하지 않습니다. 회원가입 해주세요.');
+        setIsSignup(true);
+      } else if (code === 'auth/wrong-password') {
+        setAuthError('❌ 비밀번호가 틀렸습니다.');
+      } else {
+        setAuthError(`❌ 오류가 발생했습니다: ${err.message}`);
+      }
     }
-
-    setAuthError('');
-    setLoginOpen(false);
-    setUsername('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-
-  } catch (err) {
-    const code = err.code;
-    if (code === 'auth/email-already-in-use') {
-      setAuthError('⚠️ 이미 가입된 이메일입니다. 로그인 해주세요.');
-      setIsSignup(false);
-    } else if (code === 'auth/invalid-email') {
-      setAuthError('❌ 이메일 형식이 잘못되었습니다.');
-    } else if (code === 'auth/weak-password') {
-      setAuthError('❌ 비밀번호는 6자 이상이어야 합니다.');
-    } else if (code === 'auth/user-not-found') {
-      setAuthError('⚠️ 계정이 존재하지 않습니다. 회원가입 해주세요.');
-      setIsSignup(true);
-    } else if (code === 'auth/wrong-password') {
-      setAuthError('❌ 비밀번호가 틀렸습니다.');
-    } else {
-      setAuthError(`❌ 오류가 발생했습니다: ${err.message}`);
-    }
-  }
-};
+  };
 
 
   const handleLogout = async () => { await signOut(auth); alert('🚪 로그아웃 완료'); };
@@ -174,6 +206,8 @@ const Header = () => {
         </div>
       </header>
 
+
+
       {/* 🔍 검색창 */}
       <div className={`search-bar ${searchOpen ? "open" : closing ? "closing" : ""}`} ref={searchRef}>
         <FaSearch className="search-icon" />
@@ -189,86 +223,86 @@ const Header = () => {
       </div>
 
 
-            {/* 📌 메뉴 */}
-            {menuOpen && (
-                <div className="menu-overlay" ref={menuRef}>
-                    <button className="close-button" onClick={toggleMenu}>×</button>
-                    <div className="menu-content">
-                        <ul className="menu-list">
-                            <li>MUSEUMS
-                                <ul>
-                                    <li><Link to="/louvre" onClick={handleMenuLinkClick}>루브르</Link></li>
-                                    <li><Link to="/british" onClick={handleMenuLinkClick}>대영 박물관</Link></li>
-                                    <li><Link to="/ermitage" onClick={handleMenuLinkClick}>에르미타주</Link></li>
-                                    <li><Link to="/vatican" onClick={handleMenuLinkClick}>바티칸</Link></li>
-                                    <li><Link to="/met" onClick={handleMenuLinkClick}>메트로폴리탄</Link></li>
-                                </ul>
-                            </li>
-                            <li><Link to="/exhibitions" onClick={handleMenuLinkClick}>특별전시</Link></li>
-                            <li><Link to="/education" onClick={handleMenuLinkClick}>교육자료</Link></li>
-                        </ul>
-                        <div className="menu-bottom">
-                            <button onClick={openAboutModal}>ABOUT</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+      {/* 📌 메뉴 */}
+      {menuOpen && (
+        <div className="menu-overlay" ref={menuRef}>
+          <button className="close-button" onClick={toggleMenu}>×</button>
+          <div className="menu-content">
+            <ul className="menu-list">
+              <li>MUSEUMS
+                <ul>
+                  <li><Link to="/louvre" onClick={handleMenuLinkClick}>루브르</Link></li>
+                  <li><Link to="/british" onClick={handleMenuLinkClick}>대영 박물관</Link></li>
+                  <li><Link to="/ermitage" onClick={handleMenuLinkClick}>에르미타주</Link></li>
+                  <li><Link to="/vatican" onClick={handleMenuLinkClick}>바티칸</Link></li>
+                  <li><Link to="/met" onClick={handleMenuLinkClick}>메트로폴리탄</Link></li>
+                </ul>
+              </li>
+              <li><Link to="/exhibitions" onClick={handleMenuLinkClick}>특별전시</Link></li>
+              <li><Link to="/education" onClick={handleMenuLinkClick}>교육자료</Link></li>
+            </ul>
+            <div className="menu-bottom">
+              <button onClick={openAboutModal}>ABOUT</button>
+            </div>
+          </div>
+        </div>
+      )}
 
-            {/* ✅ 로그인/회원가입 모달 */}
-            {loginOpen && !user && (
-                <div className="login-panel" ref={loginRef}>
-                    <button className="close-button" onClick={toggleLogin}>×</button>
-                    <h2>{isSignup ? 'SIGN UP' : 'LOG IN'}</h2>
-                    {authError && <p className="error-text">{authError}</p>}
-                    <form onSubmit={handleAuth}>
-                        {isSignup && (
-                            <input type="text" placeholder="아이디" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                        )}
-                        <input type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                        <input type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                        {isSignup && (
-                            <input type="password" placeholder="비밀번호 확인" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                        )}
-                        <button type="submit">{isSignup ? '회원가입' : '로그인'}</button>
-                    </form>
-                    <div className="switch-auth">
-                        {isSignup ? (
-                            <p>이미 계정이 있나요? <button onClick={() => setIsSignup(false)}>로그인</button></p>
-                        ) : (
-                            <p>계정이 없나요? <button onClick={() => setIsSignup(true)}>회원가입</button></p>
-                        )}
-                    </div>
-                </div>
+      {/* ✅ 로그인/회원가입 모달 */}
+      {loginOpen && !user && (
+        <div className="login-panel" ref={loginRef}>
+          <button className="close-button" onClick={toggleLogin}>×</button>
+          <h2>{isSignup ? 'SIGN UP' : 'LOG IN'}</h2>
+          {authError && <p className="error-text">{authError}</p>}
+          <form onSubmit={handleAuth}>
+            {isSignup && (
+              <input type="text" placeholder="아이디" value={username} onChange={(e) => setUsername(e.target.value)} required />
             )}
+            <input type="email" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="password" placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            {isSignup && (
+              <input type="password" placeholder="비밀번호 확인" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+            )}
+            <button type="submit">{isSignup ? '회원가입' : '로그인'}</button>
+          </form>
+          <div className="switch-auth">
+            {isSignup ? (
+              <p>이미 계정이 있나요? <button onClick={() => setIsSignup(false)}>로그인</button></p>
+            ) : (
+              <p>계정이 없나요? <button onClick={() => setIsSignup(true)}>회원가입</button></p>
+            )}
+          </div>
+        </div>
+      )}
 
-            {/* ✅ ABOUT 모달 */}
-            {aboutOpen && (
-                <div className="about-modal">
-                    <div className="about-page">
-                        <button className="close-button" onClick={() => setAboutOpen(false)}>×</button>
-                        <div className="about-header">
-                            <h1>ABOUT</h1>
-                        </div>
-                        <div className="about-content">
-                            <div className="about-image">
-                                <img src="/img/about-image.png" alt="About Archive Musee" />
-                            </div>
-                            <div className="about-text">
-                                <p>
-                                    Archive Musée는 세계 유수의 박물관에서 엄선한 명작들을 모아놓은 디지털 아카이브입니다.<br />
-                                    누구나 언제 어디서나 인류의 시각적 역사를 탐색하고 감상할 수 있도록 열려 있습니다.
-                                </p>
-                                <p className="en">
-                                    Archive Musée is a digital archive of masterpieces from the world’s leading museums.<br />
-                                    We provide open access to art and cultural heritage anytime, anywhere.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
+      {/* ✅ ABOUT 모달 */}
+      {aboutOpen && (
+        <div className="about-modal">
+          <div className="about-page">
+            <button className="close-button" onClick={() => setAboutOpen(false)}>×</button>
+            <div className="about-header">
+              <h1>ABOUT</h1>
+            </div>
+            <div className="about-content">
+              <div className="about-image">
+                <img src="/img/about-image.png" alt="About Archive Musee" />
+              </div>
+              <div className="about-text">
+                <p>
+                  Archive Musée는 세계 유수의 박물관에서 엄선한 명작들을 모아놓은 디지털 아카이브입니다.<br />
+                  누구나 언제 어디서나 인류의 시각적 역사를 탐색하고 감상할 수 있도록 열려 있습니다.
+                </p>
+                <p className="en">
+                  Archive Musée is a digital archive of masterpieces from the world’s leading museums.<br />
+                  We provide open access to art and cultural heritage anytime, anywhere.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default Header;

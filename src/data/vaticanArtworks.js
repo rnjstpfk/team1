@@ -60,3 +60,6 @@ export const vaticanArtworks = [
     info: '주세페 모모, 1932'
   },
 ];
+
+
+export default vaticanArtworks;

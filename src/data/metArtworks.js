@@ -66,3 +66,7 @@ export const metArtworks  = [
     info: 'Middle Bronze Age, ca. 19th century BCE'
   }
 ];
+
+
+
+export default metArtworks;

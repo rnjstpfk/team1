@@ -13,7 +13,11 @@ import British from './pages/British';
 import Ermitage from './pages/Ermitage';
 import Vatican from './pages/Vatican';
 import Met from './pages/Met';
+import Exhibitions from './pages/Exhibitions';
 import ArtworkDetail from './pages/ArtworkDetail';
+
+//위로 올라가는 버튼
+import ScrollToTopButton from './components/ScrollToTopButton';
 // import About from './pages/About';
 
 
@@ -36,10 +40,12 @@ function App() {
     <div className="wrapper">
       <Router>
         <Header />
+        <ScrollToTopButton />
         <main className="main">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginForm />} />
+            <Route path="/exhibitions" element={<Exhibitions />} />
             <Route path="/search" element={<SearchResults />} />
             <Route path="/louvre" element={<Louvre />} />
             <Route path="/british" element={<British />} />
@@ -48,8 +54,12 @@ function App() {
             <Route path="/met" element={<Met />} />
             {/* <Route path="/about" element={<About />} /> */}
             <Route path="/:museum/artwork/:id" element={<ArtworkDetail />} />
+            
           </Routes>
+          
         </main>
+        
+
         <Footer />
       </Router>
     </div>

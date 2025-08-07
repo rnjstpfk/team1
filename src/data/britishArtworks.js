@@ -42,3 +42,5 @@ export const britishArtworks = [
     info: '10세기'
   }
 ];
+
+export default britishArtworks;

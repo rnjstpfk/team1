@@ -60,3 +60,6 @@ export const louvreArtworks = [
     info: '파올로 베로네세, 1563'
   }
 ];
+
+
+export default louvreArtworks;
