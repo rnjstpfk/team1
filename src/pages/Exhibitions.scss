@@ -1,23 +1,86 @@
-// ScrollToTopButton.scss
-.scroll-to-top {
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  background-color: #2f3837;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  padding: 14px;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-  z-index: 9999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+.exhibitions-page {
+  padding: 60px 40px;
+  background-color: #dfe9e4;
+  font-family: 'Noto Sans KR', sans-serif;
 
-  &.visible {
-    opacity: 1;
-    pointer-events: auto;
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 50px;
+    color: #111;
+  }
+
+  .exhibitions-museum-list {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+
+    .museum-row {
+      .museum-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        padding-left: 12px;
+        border-left: 6px solid #2f3837;
+        color: #2f3837;
+        text-transform: uppercase;
+      }
+
+      .museum-artworks {
+        display: flex;
+        flex-wrap: nowrap; // ❗ 줄바꿈 방지
+        overflow-x: auto;  // ❗ 가로 스크롤 허용
+        gap: 20px;
+        padding-bottom: 10px;
+
+        &::-webkit-scrollbar {
+          height: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: #aaa;
+          border-radius: 4px;
+        }
+
+        .artwork-item {
+          flex: 0 0 auto;     // ❗ 고정 너비 유지
+          width: 200px;
+          height: 250px;
+          background-color: #2f3837;
+          color: #fff;
+          border-radius: 6px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: 10px;
+          box-sizing: border-box;
+
+          img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #000;
+          }
+
+          .artwork-title {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.2;
+          }
+        }
+      }
+    }
+  }
+
+  .exhibitions-example {
+    display: block;
+    margin: 40px auto 0;
+    max-width: 100%;
+    border: 2px solid #2f3837;
+    border-radius: 8px;
   }
 }
