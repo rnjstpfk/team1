@@ -57,6 +57,7 @@ function App() {
             <Route path="/:museum/artwork/:id" element={<ArtworkDetail />} />
             <Route path="/education" element={<Education />} />
             
+            
           </Routes>
           
         </main>

@@ -82,7 +82,7 @@ const Education = () => {
             <div className={`museum-row ${idx % 2 === 0 ? 'row-normal' : 'row-reverse'}`}>
               {/* 영상 */}
            <div className="museum-video-box">
-            <div className="museum-name museum-name-above">{museum.name}</div>
+            
             <div className="museum-video-outer">
               {selectedVideo && (
                <div className="museum-video-frame">
@@ -101,6 +101,7 @@ const Education = () => {
            </div>
               {/* 리스트 */}
               <div className="museum-resource-list">
+               <div className="museum-name museum-name-above">{museum.name}</div>
                <ul className="museum-resources">
                  {museum.videos.map((video, vIdx) => (
                   <li

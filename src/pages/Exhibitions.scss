@@ -18,9 +18,10 @@
     align-items: stretch;
   }
 
+  /* 라벨 + 트랙 (데스크톱: 2열) */
   .museum-row {
     display: grid;
-    grid-template-columns: 120px 1fr;  // 왼쪽 라벨 + 오른쪽 트랙
+    grid-template-columns: 140px 1fr;
     column-gap: 24px;
     align-items: start;
     position: relative;
@@ -35,29 +36,27 @@
     color: #2f3837;
     text-transform: uppercase;
     align-self: start;
+    line-height: 1.2;
   }
 
   /* === 가로 스크롤 트랙 === */
   .museum-artworks {
     display: flex;
-    flex-wrap: nowrap;           /* 한 줄 유지 */
+    flex-wrap: nowrap;
     gap: 20px;
-    padding: 4px 8px 12px;       /* 아래 패딩: 스크롤바 여유 */
-    overflow-x: auto;            /* 가로 스크롤 */
+    padding: 4px 8px 12px;
+    overflow-x: auto;
     overflow-y: hidden;
-    scroll-snap-type: x proximity;     /* 살짝 스냅 */
-    -webkit-overflow-scrolling: touch; /* iOS 관성 스크롤 */
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
 
-    /* 스크롤바 스타일(선택) */
     &::-webkit-scrollbar { height: 8px; }
     &::-webkit-scrollbar-thumb { background-color: #aaa; border-radius: 4px; }
-
-    
   }
 
   .artwork-item {
-    flex: 0 0 auto;              /* 카드 고정 폭 */
+    flex: 0 0 auto;
     width: 200px;
     height: 250px;
     background-color: #2f3837;
@@ -69,7 +68,7 @@
     text-align: center;
     padding: 10px;
     box-sizing: border-box;
-    scroll-snap-align: start;     /* 스냅 위치 */
+    scroll-snap-align: start;
 
     img {
       width: 100%;
@@ -87,9 +86,75 @@
     }
   }
 
-  /* 반응형 옵션 */
+  /* ====== 반응형 ====== */
+
+  /* 중간 화면 (노트북/태블릿 가로) */
+  @media (max-width: 1200px) {
+    .museum-row { grid-template-columns: 120px 1fr; }
+    .museum-artworks { gap: 16px; }
+    .artwork-item { width: 180px; height: 230px; }
+    .artwork-item img { height: 145px; }
+  }
+
+  /* 태블릿 세로 */
+  @media (max-width: 992px) {
+    padding: 48px 24px;
+
+    .museum-row {
+      /* 라벨을 위로 올려 세로 스택 */
+      grid-template-columns: 1fr;
+      row-gap: 10px;
+    }
+    .museum-title {
+      margin: 0;
+      padding-left: 10px;
+      font-size: 18px;
+      border-left-width: 5px;
+    }
+    .museum-artworks {
+      gap: 14px;
+      padding: 2px 4px 10px;
+    }
+    .artwork-item { width: 170px; height: 220px; }
+    .artwork-item img { height: 135px; }
+  }
+
+  /* 모바일 */
   @media (max-width: 768px) {
-    .museum-row { grid-template-columns: 90px 1fr; column-gap: 16px; }
-    .artwork-item { width: 160px; height: 220px; }
+    padding: 36px 16px;
+
+    h1 { font-size: 26px; margin-bottom: 28px; }
+
+    .exhibitions-museum-list { gap: 40px; }
+
+    .museum-title {
+      font-size: 16px;
+      border-left-width: 4px;
+    }
+
+    .museum-artworks {
+      gap: 12px;
+      scroll-snap-type: x mandatory; /* 모바일에선 더 강한 스냅 */
+      &::-webkit-scrollbar { height: 6px; }
+    }
+
+    .artwork-item {
+      width: 150px;
+      height: 205px;
+      padding: 8px;
+    }
+    .artwork-item img { height: 120px; }
+    .artwork-item .artwork-title { font-size: 13px; }
+  }
+
+  /* 작은 모바일 */
+  @media (max-width: 480px) {
+    .artwork-item { width: 135px; height: 190px; }
+    .artwork-item img { height: 108px; }
+  }
+
+  /* 사용자가 모션 줄이기 설정 시 스냅/관성 완화 */
+  @media (prefers-reduced-motion: reduce) {
+    .museum-artworks { scroll-snap-type: none; }
   }
 }

@@ -1,18 +1,19 @@
 .museum-name-above {
-  font-size: 1.18rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   text-decoration: underline;
   color: #222;
   text-align: left;
-  margin-left: 0;
 }
+
+/* ===== 영상 외곽 ===== */
 .museum-video-outer {
   width: 100%;
   min-height: 400px;
   background: #2d2323;
-  border-radius: 24px;
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.13);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,61 +21,69 @@
   margin: 0 auto;
   max-width: 98%;
 }
+
+/* ===== 영상 프레임 ===== */
 .museum-video-frame {
   width: 90%;
   max-width: 640px;
-  background: transparent;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: none;
-  padding: 0;
+  background: transparent;
 }
 
-// 전체 배경 및 폰트
+/* ===== 전체 페이지 ===== */
 .education-page {
   background: #e6f0ea;
   min-height: 100vh;
-  padding: 0 0 60px 0;
-  font-family: 'Noto Sans KR', 'Arial', sans-serif;
+  padding-bottom: 60px;
+  font-family: 'Noto Sans KR', Arial, sans-serif;
+
+  h1.education-title {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 900;
+    margin: 0;
+    padding: 48px 16px 32px;
+    letter-spacing: 1px;
+    color: #222;
+  }
 }
 
-.education-title {
-  text-align: center;
-  font-size: 2.8rem;
-  font-weight: 900;
-  margin: 0;
-  padding: 48px 0 32px 0;
-  letter-spacing: 1px;
-}
-
+/* ===== 박물관 리스트 ===== */
 .education-museum-list {
   max-width: 1100px;
   margin: 0 auto;
+  padding: 0 75px;
 }
 
+/* ===== 각 박물관 섹션 ===== */
 .museum-section {
-  padding: 36px 0 24px 0;
+  padding: 36px 0 24px;
 }
 
 .museum-divider {
   border: none;
-  border-top: 2px solid #444;
-  margin: 36px 0 0 0;
+  border-top: 2px solid #ccc;
+  margin: 36px 0 0;
 }
 
+/* ===== 가로 정렬 (데스크탑) ===== */
 .museum-row {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 40px;
-}
-.row-normal {
-  flex-direction: row;
-}
-.row-reverse {
-  flex-direction: row-reverse;
+
+  &.row-normal {
+    flex-direction: row;
+  }
+
+  &.row-reverse {
+    flex-direction: row-reverse;
+  }
 }
 
+/* ===== 비디오 박스 ===== */
 .museum-video-box {
   flex: 1 1 380px;
   display: flex;
@@ -82,71 +91,104 @@
   justify-content: center;
   min-width: 320px;
   max-width: 600px;
-}
-.museum-video-frame {
-  width: 100%;
-  background: #3a2f2f;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
-  overflow: hidden;
-  padding: 0;
+
+  .museum-video-frame {
+    width: 100%;
+    background: #3a2f2f;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+  }
 }
 
+/* ===== 자료 리스트 ===== */
 .museum-resource-list {
   flex: 1 1 320px;
   min-width: 220px;
   max-width: 420px;
   padding: 0 12px;
+  .museum-name-above {
+  margin-bottom: 14px; /* 리스트와 간격 */
 }
-.museum-name {
-  font-size: 1.18rem;
-  font-weight: 700;
-  margin-bottom: 18px;
-  text-decoration: underline;
-  color: #222;
+
+  .museum-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-decoration: underline;
+    color: #222;
+  }
+
+  .museum-resources {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .resource-item {
+    background: #f7f7f7;
+    border-radius: 7px;
+    padding: 10px 16px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #222;
+    font-weight: 500;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background 0.18s, border 0.18s, color 0.18s;
+    text-align: left;
+    white-space: pre-line;
+
+    &.selected {
+      background: #d1e2d6;
+      border: 2px solid #222;
+      color: #111;
+      font-weight: 700;
+    }
+
+    &:hover {
+      background: #e6f0ea;
+      color: #111;
+    }
+  }
 }
-.museum-resources {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.resource-item {
-  background: #f7f7f7;
-  border-radius: 7px;
-  padding: 10px 16px;
-  margin-bottom: 10px;
-  font-size: 1rem;
-  color: #222;
-  font-weight: 500;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: background 0.18s, border 0.18s, color 0.18s;
-  text-align: left;
-  white-space: pre-line;
-}
-.resource-item.selected {
-  background: #d1e2d6;
-  border: 2px solid #222;
-  color: #111;
-  font-weight: 700;
-}
-.resource-item:hover {
-  background: #e6f0ea;
-  color: #111;
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  .museum-row {
+    gap: 24px;
+  }
 }
 
 @media (max-width: 900px) {
   .museum-row {
     flex-direction: column !important;
-    gap: 18px;
+    gap: 20px;
   }
-  .museum-video-box, .museum-resource-list {
+
+  .museum-video-box,
+  .museum-resource-list {
     max-width: 100%;
     min-width: 0;
+    padding: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .education-page h1.education-title {
+    font-size: 1.8rem;
+    padding: 32px 12px;
+  }
+
+  .museum-name,
+  .museum-name-above {
+    font-size: 1rem;
+  }
+
+  .museum-resource-list .resource-item {
+    font-size: 0.9rem;
+    padding: 8px 12px;
   }
 }
 
 
-.education-page{
-    h1{text-align: center;}
-}
+

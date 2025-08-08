@@ -24,11 +24,15 @@ const Home = () => {
             <div className="swiper-container">
                 <Swiper
                     spaceBetween={100}
-                    slidesPerView={3}
                     loop={true}
                     autoplay={{
                         delay: 3000,
                         disableOnInteraction: false,
+                    }}
+                    breakpoints={{
+                        0: { slidesPerView: 1, spaceBetween: 20 }, // 📱 모바일: 1장
+                        768: { slidesPerView: 2, spaceBetween: 40 }, // 태블릿: 2장
+                        1280: { slidesPerView: 3, spaceBetween: 100 } // 데스크탑: 3장
                     }}
                     modules={[Autoplay]}
                 >

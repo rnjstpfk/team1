@@ -220,7 +220,19 @@ const Header = () => {
         </div>
       </header>
 
-      {/* 🔍 검색바는 그대로 */}
+      {/* 🔍 검색창 */}
+      <div className={`search-bar ${searchOpen ? "open" : closing ? "closing" : ""}`} ref={searchRef}>
+        <FaSearch className="search-icon" />
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          onKeyDown={handleSearchKey}
+          autoFocus={searchOpen}
+        />
+        <button className="search-close" onClick={() => setSearchOpen(false)}>×</button>
+      </div>
 
       {/* 📌 사이드 메뉴 */}
       {menuOpen && (
