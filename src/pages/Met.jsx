@@ -1,6 +1,8 @@
 import './Met.scss';
 import { metArtworks } from '../data/metArtworks.js';
 import { Link } from 'react-router-dom';
+import LikeButton from "../components/LikeButton";
+
 
 const Met = () => {
     return (
@@ -30,7 +32,12 @@ const Met = () => {
                             key={art.id}
                             className="galleryItem"
                         >
-                            <img src={art.image} alt={art.title} />
+                            {/* ✅ 하트 + 이미지 */}
+                            <div className="image-wrapper">
+                                <LikeButton artworkId={`met-${art.id}`} />
+                                <img src={art.image} alt={art.title} />
+                            </div>
+
                             <h3>{art.title}</h3>
                             <p>{art.info}</p>
                         </Link>

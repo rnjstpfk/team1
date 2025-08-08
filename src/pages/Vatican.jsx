@@ -1,6 +1,8 @@
 import './Vatican.scss';
 import { vaticanArtworks } from '../data/vaticanArtworks';
 import { Link } from 'react-router-dom';
+import LikeButton from "../components/LikeButton";
+
 
 const Vatican = () => {
     return (
@@ -19,12 +21,17 @@ const Vatican = () => {
                 <section className="gallery">
                     {vaticanArtworks.map((art) => (
                         <Link
-                            to={`/vatican/artwork/${art.id}`}   // ✅ museum 이름 포함된 경로
-                            state={{ from: "/vatican" }}        // ✅ 뒤로가기 시 사용할 경로
+                            to={`/vatican/artwork/${art.id}`}
+                            state={{ from: "/vatican" }}
                             key={art.id}
                             className="galleryItem"
                         >
-                            <img src={art.image} alt={art.title} />
+                            {/* ✅ 이미지 안에 하트 */}
+                            <div className="image-wrapper">
+                                <LikeButton artworkId={`vatican-${art.id}`} />
+                                <img src={art.image} alt={art.title} />
+                            </div>
+
                             <h3>{art.title}</h3>
                             <p>{art.info}</p>
                         </Link>

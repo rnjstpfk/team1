@@ -1,6 +1,7 @@
 import './Louvre.scss';
 import { louvreArtworks } from '../data/louvreArtworks';
 import { Link } from 'react-router-dom';
+import LikeButton from "../components/LikeButton";
 
 const Louvre = () => {
     return (
@@ -24,8 +25,17 @@ const Louvre = () => {
             <div className="main_section">
                 <section className="gallery">
                     {louvreArtworks.map((art) => (
-                        <Link to={`/artwork/${art.id}`} key={art.id} className="galleryItem">
-                            <img src={art.image} alt={art.title} />
+                        <Link
+                            to={`/artwork/${art.id}`} 
+                            key={art.id}
+                            className="galleryItem"
+                        >
+                            {/* ✅ 하트 + 이미지 */}
+                            <div className="image-wrapper">
+                                <LikeButton artworkId={`louvre-${art.id}`} />
+                                <img src={art.image} alt={art.title} />
+                            </div>
+
                             <h3>{art.title}</h3>
                             <p>{art.info}</p>
                         </Link>

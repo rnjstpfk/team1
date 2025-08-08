@@ -1,6 +1,7 @@
 import './British.scss';
 import { britishArtworks } from '../data/britishArtworks';
 import { Link } from 'react-router-dom';
+import LikeButton from "../components/LikeButton";
 
 const British = () => {
     return (
@@ -27,8 +28,12 @@ const British = () => {
                             key={art.id}
                             className="galleryItem"
                         >
+                            {/* ✅ 이미지 래퍼 안에 하트 + 이미지 */}
+                            <div className="image-wrapper">
+                                <LikeButton artworkId={`british-${art.id}`} />
+                                <img src={art.image} alt={art.title} />
+                            </div>
 
-                            <img src={art.image} alt={art.title} />
                             <h3>{art.title}</h3>
                             <p>{art.info}</p>
                         </Link>

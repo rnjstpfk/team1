@@ -1,6 +1,7 @@
 import './Louvre.scss';
 import { louvreArtworks } from '../data/louvreArtworks';
 import { Link } from 'react-router-dom';
+import LikeButton from "../components/LikeButton"; // 상단에 추가
 
 
 const Louvre = () => {
@@ -29,11 +30,16 @@ const Louvre = () => {
               key={art.id}
               className="galleryItem"
             >
+              {/* 👇 추가 */}
+              <div className="image-wrapper">
+                <LikeButton artworkId={`louvre-${art.id}`} />
+                <img src={art.image} alt={art.title} />
+              </div>
 
-              <img src={art.image} alt={art.title} />
               <h3>{art.title}</h3>
               <p>{art.info}</p>
             </Link>
+
           ))}
         </section>
       </div>

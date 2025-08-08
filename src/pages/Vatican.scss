@@ -74,3 +74,45 @@
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* 기준 박스 */
+.vatican .galleryItem .image-wrapper {
+  position: relative;
+}
+
+/* 이미지 */
+.vatican .galleryItem .image-wrapper img {
+  width: 100%;
+  display: block;
+}
+
+/* 하트: 이미지 안 좌상단 */
+.vatican .galleryItem .image-wrapper > .like-button {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  border: none;
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 18px;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+.vatican .galleryItem .image-wrapper > .like-button.liked {
+  background: rgba(0,0,0,0.35);
+  color: red;
+}
