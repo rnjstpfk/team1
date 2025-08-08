@@ -53,9 +53,20 @@ const LoginForm = () => {
 
   // ✅ 로그아웃
   const handleLogout = async () => {
+    // 1. Firebase 로그아웃
     await signOut(auth);
+
+    // 2. localStorage에서 like 기록 모두 삭제
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith("like:")) {
+        localStorage.removeItem(key);
+      }
+    });
+
     alert('🚪 로그아웃 완료');
   };
+
+
 
   // ✅ UI 렌더링
   if (user) {
@@ -72,15 +83,15 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit} className="p-6 bg-white shadow rounded w-96">
       <h2 className="text-xl font-bold mb-3">{isSignup ? '회원가입' : '로그인'}</h2>
-      
+
       {/* ✅ 회원가입일 때만 아이디 입력 */}
       {isSignup && (
-        <input 
-          type="text" 
-          placeholder="아이디(닉네임)" 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)} 
-          className="border p-2 w-full mb-2" 
+        <input
+          type="text"
+          placeholder="아이디(닉네임)"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="border p-2 w-full mb-2"
           required
         />
       )}
