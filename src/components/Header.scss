@@ -150,11 +150,12 @@ body {
   position: fixed;
   top: 90px;
   left: 0;
-  width: 32%;
+  width: 25%;
   height: 100%;
   background: #ddd;
   z-index: 1000;
   padding: 40px 20px;
+  
 
   .close-button {
     position: absolute;
@@ -601,7 +602,7 @@ body {
 .menu-list {
   list-style: none; padding: 0; margin: 0; display: grid; gap: 10px;
 
-  .menu-title { font-weight: 800; margin: 6px 0 2px; }
+  .menu-title { font-weight: 800; margin: 6px 0 2px; font-size: 16px;}
   .menu-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 4px 0; }
   a { text-decoration: none; display: block; padding: 6px 4px; border-radius: 6px; }
   a:hover { background: rgba(0,0,0,0.06); }
@@ -615,6 +616,7 @@ body {
   color: rgba(0, 0, 0, 0.6); // 검은색보다 연하게
   transition: color 0.2s;
   font-weight: 400;
+  font-size: 14px;
 
   &:hover {
     color: rgba(0, 0, 0, 0.8); // hover 시 조금 진하게
@@ -636,5 +638,5 @@ body {
   .menu-account { display: block; }
 
   /* 메뉴 폭/여백 조정 (선택) */
-  .menu-overlay { width: 78vw; max-width: 360px; }
+  .menu-overlay { width: 97%; /* max-width: 360px; */ }
 }
