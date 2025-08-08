@@ -2,14 +2,13 @@ import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-
 const firebaseConfig = {
-  apiKey: "AIzaSyBDEo5fBWwPyEQa31U6GEzpwLyrJFqvXOU",
-  authDomain: "team1-2c9b9.firebaseapp.com",
-  projectId: "team1-2c9b9",
-  storageBucket: "team1-2c9b9.appspot.com",
-  messagingSenderId: "2335568031",
-  appId: "1:2335568031:web:381abd9c495781826f72aa"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 // ✅ 이미 초기화된 앱이 있으면 재사용

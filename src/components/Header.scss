@@ -544,3 +544,97 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 헤더 오른쪽 영역 */
+.header-right {
+  display: flex; gap: 8px; align-items: center;
+}
+
+/* 데스크톱 기본: 계정 보임 */
+.account-desktop { display: flex; gap: 8px; align-items: center; }
+
+/* 메뉴 헤더(닫기 버튼만 깔끔히) */
+.menu-header {
+  display: flex; justify-content: flex-end; padding: 10px 12px;
+}
+
+/* 메뉴 내용 레이아웃 */
+.menu-content {
+  display: flex; flex-direction: column;
+  padding: 8px 12px 16px;
+  gap: 12px;
+}
+
+/* 계정 블록(모바일용) */
+.menu-account {
+  display: none; /* 데스크톱 기본 비표시 */
+  padding: 12px 8px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.04);
+
+  .menu-user {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    .avatar { font-size: 18px; }
+    .name { font-weight: 600; }
+  }
+  .menu-login, .menu-logout {
+    width: 100%; text-align: left; background: transparent; border: 0;
+    padding: 8px 0; font-size: 14px; cursor: pointer;
+  }
+}
+
+/* 메뉴 리스트 */
+.menu-list {
+  list-style: none; padding: 0; margin: 0; display: grid; gap: 10px;
+
+  .menu-title { font-weight: 800; margin: 6px 0 2px; }
+  .menu-divider { height: 1px; background: rgba(0,0,0,0.08); margin: 4px 0; }
+  a { text-decoration: none; display: block; padding: 6px 4px; border-radius: 6px; }
+  a:hover { background: rgba(0,0,0,0.06); }
+}
+
+/* 서브메뉴 */
+.submenu a {
+  display: block;
+  padding: 8px 6px;
+  border-radius: 6px;
+  color: rgba(0, 0, 0, 0.6); // 검은색보다 연하게
+  transition: color 0.2s;
+  font-weight: 400;
+
+  &:hover {
+    color: rgba(0, 0, 0, 0.8); // hover 시 조금 진하게
+  }
+}
+
+
+
+
+
+
+/* 🔽 모바일 전환 */
+@media (max-width: 768px) {
+  /* 헤더 상단: 계정 숨기고 검색만 남김 */
+  .account-desktop { display: none; }
+  .search-button { display: inline-flex; } /* 항상 보이도록 보강 */
+
+  /* 메뉴 안 계정 블록 노출 */
+  .menu-account { display: block; }
+
+  /* 메뉴 폭/여백 조정 (선택) */
+  .menu-overlay { width: 78vw; max-width: 360px; }
+}

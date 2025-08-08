@@ -1,6 +1,5 @@
-ArtworkDetail.SCSS
-
 /* ✅ 페이지 전체 배경색 적용 */
+
 body {
   background: #DAE3DC;   // 기존 톤과 동일
   position: relative;
@@ -42,30 +41,102 @@ body {
     color: #2F3837;
     text-align: center;
   }
+  .art-info{
+      font-size: 18px;
+      line-height: 1.8;
+      color: #444;
+      text-align: center;
+      padding: 15px 20px;
+      border-radius: 8px;
+      white-space: pre-line; // ✅ 줄바꿈 적용
+    }
+  }
 
   // ✅ 작품 이미지
-  img {
-    display: block;
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    object-fit: cover;
-    background: #fff;
+  .art-main-img{
+    img {
+      display: block;
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+      background: #fff;
+    }
+}
+  // ✅ 설명 텍스트
+  /* ✅ info 전용 스타일 */
+  .art-detail {
+    font-size: 18px;
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+    margin-bottom: 30px;
   }
 
-  // ✅ 설명 텍스트
-  p {
-    font-size: 18px;
-    line-height: 1.8;
-    color: #444;
-    text-align: center;
-    padding: 15px 20px;
-    border-radius: 8px;
-    white-space: pre-line; // ✅ 줄바꿈 적용
+  /* ✅ descriptions 전용 스타일 */
+  .art-desc{
+    p {
+      font-size: 16px;
+      color: #444;
+      text-align: left;
+      padding-top: 20px;
+      padding-left: 190px;
+      border-radius: 8px;
+      line-height: 0%;
+    }
   }
-}
+  .art-img1{
+    img{
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 50px auto 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+      background: #fff;
+    }
+  }
+  .art-img2{
+    img{
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+      background: #fff;
+    }
+  }
+  .art-story-tit{
+      font-size: 14px;
+      color: #444;
+      font-weight: bold;
+      text-align: left;
+      padding-top: 50px;
+      margin-bottom: -10px;
+      padding-left: 210px;
+      border-radius: 8px;
+      line-height: 0%;
+  }
+  .art-story{
+    p{
+      font-size: 13px;
+      color: #444;
+      text-align: left;
+      padding-top: 9px;
+      padding-left: 200px;
+      padding-right: 190px;
+      border-radius: 8px;
+      line-height: 0%;
+      letter-spacing: 1px;
+    }
+  }
+
+
 
 /* ✅ 반응형 디자인 */
 @media (max-width: 768px) {
@@ -80,4 +151,5 @@ body {
       font-size: 16px;
     }
   }
+  
 }

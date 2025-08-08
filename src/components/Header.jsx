@@ -74,31 +74,31 @@ const Header = () => {
   }, [menuOpen, loginOpen, searchOpen]);
 
 
-// ✅ 스크롤 시 메뉴, 검색창 닫기
-useEffect(() => {
-  const handleScroll = () => {
-    // 🔍 검색창 닫기
-    if (searchOpen) {
-      setClosing(true);
-      setTimeout(() => {
-        setSearchOpen(false);
-        setClosing(false);
-      }, 300);
-    }
+  // ✅ 스크롤 시 메뉴, 검색창 닫기
+  useEffect(() => {
+    const handleScroll = () => {
+      // 🔍 검색창 닫기
+      if (searchOpen) {
+        setClosing(true);
+        setTimeout(() => {
+          setSearchOpen(false);
+          setClosing(false);
+        }, 300);
+      }
 
-    // 📌 메뉴 닫기
-    if (menuOpen) {
-      setMenuOpen(false);
-    }
+      // 📌 메뉴 닫기
+      if (menuOpen) {
+        setMenuOpen(false);
+      }
 
-    // (선택) 로그인, about도 닫을 수 있음
-    // if (loginOpen) setLoginOpen(false);
-    // if (aboutOpen) setAboutOpen(false);
-  };
+      // (선택) 로그인, about도 닫을 수 있음
+      // if (loginOpen) setLoginOpen(false);
+      // if (aboutOpen) setAboutOpen(false);
+    };
 
-  window.addEventListener('scroll', handleScroll);
-  return () => window.removeEventListener('scroll', handleScroll);
-}, [searchOpen, menuOpen]);  // ✅ menuOpen 꼭 추가!
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [searchOpen, menuOpen]);  // ✅ menuOpen 꼭 추가!
 
 
 
@@ -186,61 +186,90 @@ useEffect(() => {
         <div className="header-left" onClick={toggleMenu}>
           <img src="/img/logo.png" alt="로고" className="logo" />
         </div>
+
         <div className="header-center">
-          <Link to="/" className="site-title"><img src="/img/logo1.png" alt="logo" /></Link>
+          <Link to="/" className="site-title">
+            <img src="/img/logo1.png" alt="logo" />
+          </Link>
         </div>
+
+        {/* ✅ 검색은 항상 보이게, 계정은 데스크톱에서만 */}
         <div className="header-right">
-          {user ? (
-            <>
-              <span className="welcome">{userData?.username} 님</span>
-              <button className="icon-button" onClick={handleLogout}>로그아웃</button>
-            </>
-          ) : (
-            <button title="로그인" className="icon-button" onClick={toggleLogin}>
-              <IoPerson className="icon" />
-            </button>
-          )}
-          <button title="검색" className="icon-button" onClick={toggleSearch} ref={searchButtonRef}>
+          <div className="account-desktop">
+            {user ? (
+              <>
+                <span className="welcome">{userData?.username} 님</span>
+                <button className="icon-button" onClick={handleLogout}>로그아웃</button>
+              </>
+            ) : (
+              <button title="로그인" className="icon-button" onClick={toggleLogin}>
+                <IoPerson className="icon" />
+              </button>
+            )}
+          </div>
+
+          {/* 🔍 검색 버튼은 모바일/데스크톱 모두 노출 */}
+          <button
+            title="검색"
+            className="icon-button search-button"
+            onClick={toggleSearch}
+            ref={searchButtonRef}
+          >
             <FaSearch className="icon" />
           </button>
         </div>
       </header>
 
+      {/* 🔍 검색바는 그대로 */}
 
-
-      {/* 🔍 검색창 */}
-      <div className={`search-bar ${searchOpen ? "open" : closing ? "closing" : ""}`} ref={searchRef}>
-        <FaSearch className="search-icon" />
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요..."
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          onKeyDown={handleSearchKey}
-          autoFocus={searchOpen}
-        />
-        <button className="search-close" onClick={() => setSearchOpen(false)}>×</button>
-      </div>
-
-
-      {/* 📌 메뉴 */}
+      {/* 📌 사이드 메뉴 */}
       {menuOpen && (
         <div className="menu-overlay" ref={menuRef}>
-          <button className="close-button" onClick={toggleMenu}>×</button>
+          <div className="menu-header">
+            <button className="close-button" onClick={toggleMenu}>×</button>
+          </div>
+
           <div className="menu-content">
+            {/* ✅ 모바일 전용 계정 블록 */}
+            <div className="menu-account">
+              {user ? (
+                <>
+                  <div className="menu-user">
+                    <span className="avatar">👤</span>
+                    <span className="name">{userData?.username} 님</span>
+                  </div>
+                  <button
+                    className="menu-logout"
+                    onClick={() => { handleLogout(); setMenuOpen(false); }}
+                  >
+                    로그아웃
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="menu-login"
+                  onClick={() => { toggleLogin(); setMenuOpen(false); }}
+                >
+                  로그인
+                </button>
+              )}
+            </div>
+
             <ul className="menu-list">
-              <li>MUSEUMS
-                <ul>
-                  <li><Link to="/louvre" onClick={handleMenuLinkClick}>루브르</Link></li>
-                  <li><Link to="/british" onClick={handleMenuLinkClick}>대영 박물관</Link></li>
-                  <li><Link to="/ermitage" onClick={handleMenuLinkClick}>에르미타주</Link></li>
-                  <li><Link to="/vatican" onClick={handleMenuLinkClick}>바티칸</Link></li>
-                  <li><Link to="/met" onClick={handleMenuLinkClick}>메트로폴리탄</Link></li>
-                </ul>
-              </li>
+              <li className="menu-title">MUSEUMS</li>
+              <li className="submenu"><Link to="/louvre" onClick={handleMenuLinkClick}>루브르</Link></li>
+              <li className="submenu"><Link to="/british" onClick={handleMenuLinkClick}>대영 박물관</Link></li>
+              <li className="submenu"><Link to="/ermitage" onClick={handleMenuLinkClick}>에르미타주</Link></li>
+              <li className="submenu"><Link to="/vatican" onClick={handleMenuLinkClick}>바티칸</Link></li>
+              <li className="submenu"><Link to="/met" onClick={handleMenuLinkClick}>메트로폴리탄</Link></li>
+
+
+              <li className="menu-divider" />
+
               <li><Link to="/exhibitions" onClick={handleMenuLinkClick}>특별전시</Link></li>
               <li><Link to="/education" onClick={handleMenuLinkClick}>교육자료</Link></li>
             </ul>
+
             <div className="menu-bottom">
               <button onClick={openAboutModal}>ABOUT</button>
             </div>
