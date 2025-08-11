@@ -146,21 +146,73 @@ body {
 
 
 /* ✅ 반응형 디자인 */
+/* 🔧 최소 패치: 모바일에서 텍스트 겹침만 해결 */
 @media (max-width: 768px) {
-  .detail-page {
-    padding: 20px;
-
-    h1 {
-      font-size: 24px;
-    }
-
-    p {
-      font-size: 14px;
-      line-height: revert-layer;
-      /* text-align: center; */
-      margin: 30px 0 20px;
-      padding: 0px;
-    }
+  /* descriptions: 줄간격 정상화 + 고정 좌측 패딩 제거 */
+  .art-desc p {
+    line-height: 1.7;
+    padding-left: 0;
+    margin: 0 0 12px;
+    letter-spacing: 0;
+    white-space: normal;
+    word-break: keep-all;
   }
 
+  /* story 제목: 줄간격 정상화 + 좌측 패딩 제거 */
+  .art-story-tit {
+    line-height: 1.3;
+    padding-left: 0;
+    margin-bottom: 6px;
+  }
+
+  /* story 본문: 줄간격 정상화 + 좌우 고정 패딩 제거 */
+  .art-story p {
+    line-height: 1.7;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0 0 10px;
+    letter-spacing: 0;
+    white-space: normal;
+    word-break: keep-all;
+  }
 }
+
+
+
+
+
+/* 🔧 780~1030px에서 글자 겹침만 해결 */
+@media (min-width: 769px) and (max-width: 1050px) {
+  .detail-page .art-desc p {
+    line-height: 1.7 !important;
+    padding-left: 0 !important;      /* ← 이게 핵심 */
+    margin: 0 0 12px !important;
+    letter-spacing: 0 !important;
+    white-space: normal !important;
+    word-break: keep-all;
+  }
+
+  .detail-page .art-story-tit {
+    line-height: 1.35 !important;
+    padding-left: 0 !important;      /* ← 이것도 같이 */
+    margin-bottom: 6px !important;
+  }
+
+  .detail-page .art-story p {
+    line-height: 1.75 !important;
+    padding-left: 0 !important;      /* ← 좌우 패딩 제거 */
+    padding-right: 0 !important;
+    margin: 0 0 10px !important;
+    letter-spacing: 0 !important;
+    white-space: normal !important;
+    word-break: keep-all;
+  }
+}
+
+
+
+
+
+
+
+
