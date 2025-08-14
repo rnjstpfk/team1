@@ -1,100 +1,160 @@
-import React from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
-import { louvreArtworks } from '../data/louvreArtworks';
-import { britishArtworks } from '../data/britishArtworks';
-import { vaticanArtworks } from '../data/vaticanArtworks'; // ✅ Vatican 데이터 추가
-import { metArtworks } from '../data/metArtworks'; // ✅ metro 데이터 추가
-import { ermitageArtworks } from '../data/ermitageArtworks'; // ✅ ermitage 데이터 추가
+import React, { useEffect, useState } from 'react';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import './ArtworkDetail.scss';
 
+const MET_BASE = 'https://collectionapi.metmuseum.org/public/collection/v1';
 
-const ArtworkDetail = () => {
-  const { id, museum } = useParams(); // ✅ museum도 URL에서 받음
+// 네트워크/CORS 이슈 시 공개 프록시로 재시도
+async function fetchJSONWithFallback(url) {
+  try {
+    const r = await fetch(url, { credentials: 'omit' });
+    if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+    return await r.json();
+  } catch (e) {
+    const proxied = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+    const r2 = await fetch(proxied, { credentials: 'omit' });
+    if (!r2.ok) throw new Error(`(proxy) HTTP ${r2.status} ${r2.statusText}`);
+    return await r2.json();
+  }
+}
+
+export default function ArtworkDetail() {
+  const { museum, id } = useParams();          // /:museum/artwork/:id
   const location = useLocation();
-  const backPath = location.state?.from || "/";
 
-  // ✅ museum 값에 따라 데이터 선택
-  let artworksData;
-  if (museum === "louvre") artworksData = louvreArtworks;
-  else if (museum === "british") artworksData = britishArtworks;
-  else if (museum === "vatican") artworksData = vaticanArtworks;
-  else if (museum === "met") artworksData = metArtworks;
-  else if (museum === "ermitage") artworksData = ermitageArtworks;
-  else artworksData = [];
+  // 목록에서 넘어온 간이 데이터(있으면 즉시 표시)
+  const preloaded = location.state?.art || null;
+  const backPath = location.state?.from || `/${museum || 'met'}`;
 
-  const artwork = artworksData.find((item) => item.id === parseInt(id));
+  const [art, setArt] = useState(preloaded);
+  const [loading, setLoading] = useState(!preloaded);
+  const [error, setError] = useState('');
 
-  if (!artwork) return <h2>작품을 찾을 수 없습니다.</h2>;
+  // ★ 항상 전체 필드 다시 페치: preloaded가 있어도 즉시 표시하고, 곧바로 보강
+  useEffect(() => {
+    let alive = true;
+
+    async function fetchFull() {
+      try {
+        setLoading(true);
+        setError('');
+
+        if ((museum || 'met') !== 'met') {
+          throw new Error(`현재는 MET만 지원 중입니다. (museum="${museum}")`);
+        }
+
+        const o = await fetchJSONWithFallback(`${MET_BASE}/objects/${id}`);
+
+        if (!alive) return;
+
+        const mapped = {
+          id: o.objectID,
+          title: o.title || 'Untitled',
+          artist: o.artistDisplayName || 'Unknown',
+          artistBio: o.artistDisplayBio || '',
+          nationality: o.artistNationality || '',
+          date: o.objectDate || String(o.objectBeginDate ?? ''),
+          image: o.primaryImage || o.primaryImageSmall || '',
+          additionalImages: Array.isArray(o.additionalImages) ? o.additionalImages : [],
+          department: o.department || '',
+          culture: o.culture || '',
+          period: o.period || '',
+          medium: o.medium || '',
+          dimensions: o.dimensions || '',
+          credit: o.creditLine || '',
+          gallery: o.galleryNumber || '',
+          description: o.galleryText || o.medium || '',   // 설명 대체
+          objectURL: o.objectURL || '',
+          wikiURL: o.objectWikidata_URL || '',
+          museum: 'met'
+        };
+
+        setArt(mapped);
+      } catch (e) {
+        setError(`상세 정보를 불러오는 중 오류가 발생했습니다.\n${e?.message || e}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchFull();
+    return () => { alive = false; };
+  }, [museum, id]);
+
+  if (loading && !art) {
+    return <div className="detail-page"><div className="detail-loading">불러오는 중…</div></div>;
+  }
+  if (error && !art) {
+    return <div className="detail-page"><div className="detail-error" style={{whiteSpace:'pre-line'}}>{error}</div></div>;
+  }
 
   return (
     <div className="detail-page">
-      <Link to={backPath}>← 뒤로가기</Link>
-      <h1>{artwork.title}</h1>
-      {museum === "louvre"&& (
-        <div className="art-main-img">
-          <img src={artwork.image} alt={artwork.title} />
-        </div>
-      )}
-      {museum === "british"&& (
-        <div className="art-main-img">
-          <img src={artwork.image} alt={artwork.title} />
-        </div>
-      )}
-      {museum === "ermitage"&& (
-        <div className="art-main-img">
-          <img src={artwork.image} alt={artwork.title} />
-        </div>
-      )}
-      {museum === "vatican"&& (
-        <div className="art-main-img">
-          <img src={artwork.image} alt={artwork.title} />
-        </div>
-      )}
-      {museum === "met"&& (
-        <div className="art-main-img">
-          <img src={artwork.image} alt={artwork.title} />
-        </div>
-      )}
-      <p className="art-detail">{artwork.detail}</p>         {/* ✅ text 전용 스타일 */}
-      <div className="art-desc">                     {/* ✅ descriptions 전용 스타일 */}
-        {artwork.descriptions?.map((desc, i) => (
-          <p key={i}>{desc}</p>
-        ))}
+      <div className="detail-topbar">
+        <Link to={backPath} className="back">← Back</Link>
+        {art?.objectURL && (
+          <a className="ext" href={art.objectURL} target="_blank" rel="noreferrer">MET 페이지 ↗</a>
+        )}
       </div>
-      {museum === "louvre" && artwork.id === 0 && (
-        <div className="art-img1">
-          <img src={artwork.img1} alt="설명이미지" />
-        </div>
-      )}
-      <p className='art-story-tit'>{artwork.storytit}</p>
-      {/* <p className='art-story'>{artwork.story}</p> */}
-      <div className="art-story">
-        {artwork.story?.map((story, i) => (
-          <p key={i}>{story}</p>
-        ))}
+
+      <div className="detail-hero">
+        {art?.image ? (
+          <img src={art.image} alt={art.title} />
+        ) : (
+          <div className="no-image">No Image</div>
+        )}
       </div>
-      {museum === "louvre" && artwork.id === 4 && (
-        <div className="art-img2">
-          <img src={artwork.img2} alt="설명이미지" />
-        </div>
-      )}
-      {museum === "british" && artwork.id === 1 && (
-        <div className="art-img2">
-          <img src={artwork.img3} alt="설명이미지" />
-        </div>
-      )}
-      {museum === "vatican" && artwork.id === 7 && (
-        <div className="art-img2">
-          <img src={artwork.img4} alt="설명이미지" />
-        </div>
-      )}
-      {museum === "ermitage" && artwork.id === 9 && (
-        <div className="art-img1">
-          <img src={artwork.img5} alt="설명이미지" />
-        </div>
-      )}
+
+      <div className="detail-info">
+        <h1 className="title">{art?.title || '-'}</h1>
+        <p className="meta">
+          <b>{art?.artist || 'Unknown'}</b>
+          {art?.artistBio ? ` · ${art.artistBio}` : ''}
+          {art?.date ? ` · ${art.date}` : ''}
+          {art?.museum ? ` · ${art.museum.toUpperCase()}` : ''}
+        </p>
+
+        <dl className="kv">
+          {art?.medium && (<><dt>Medium</dt><dd>{art.medium}</dd></>)}
+          {art?.dimensions && (<><dt>Dimensions</dt><dd>{art.dimensions}</dd></>)}
+          {art?.culture && (<><dt>Culture</dt><dd>{art.culture}</dd></>)}
+          {art?.period && (<><dt>Period</dt><dd>{art.period}</dd></>)}
+          {art?.department && (<><dt>Department</dt><dd>{art.department}</dd></>)}
+          {art?.gallery && (<><dt>Gallery</dt><dd>{art.gallery}</dd></>)}
+          {art?.credit && (<><dt>Credit</dt><dd>{art.credit}</dd></>)}
+        </dl>
+
+        {art?.description && (
+          <>
+            <h2 className="sub">Description</h2>
+            <p className="desc">{art.description}</p>
+          </>
+        )}
+
+        {Array.isArray(art?.additionalImages) && art.additionalImages.length > 0 && (
+          <>
+            <h2 className="sub">More Images</h2>
+            <div className="thumbs">
+              {art.additionalImages.slice(0, 12).map((url, i) => (
+                <a key={i} className="thumb" href={url} target="_blank" rel="noreferrer">
+                  <img src={url} alt={`additional-${i}`} />
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+
+        {(art?.wikiURL || art?.objectURL) && (
+          <p className="links">
+            {art?.wikiURL && <a href={art.wikiURL} target="_blank" rel="noreferrer">Wikidata ↗</a>}
+            {' '}
+            {art?.objectURL && <a href={art.objectURL} target="_blank" rel="noreferrer">MET ↗</a>}
+          </p>
+        )}
+
+        {loading && <div className="detail-loading" style={{marginTop:12}}>세부 정보 불러오는 중…</div>}
+        {error && <div className="detail-error" style={{whiteSpace:'pre-line'}}>{error}</div>}
+      </div>
     </div>
   );
-};
-
-export default ArtworkDetail;
+}

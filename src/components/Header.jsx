@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import { IoPerson } from 'react-icons/io5';
 import { auth, db } from '../firebase';
@@ -12,7 +12,7 @@ const Header = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [closing, setClosing] = useState(false); // ✅ 닫힘 애니메이션 상태
+  const [closing, setClosing] = useState(false);
   const [searchText, setSearchText] = useState('');
 
   const [user, setUser] = useState(null);
@@ -26,26 +26,31 @@ const Header = () => {
 
   const [aboutOpen, setAboutOpen] = useState(false);
 
+  // 🔽 서브네비 스크롤 감지용
+  const [subnavHidden, setSubnavHidden] = useState(false);
+  const lastScrollYRef = useRef(typeof window !== 'undefined' ? window.scrollY : 0);
+
   const menuRef = useRef();
   const loginRef = useRef();
   const searchRef = useRef();
   const searchButtonRef = useRef();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   // ✅ 스크롤 시 검색창 닫기 (부드러운 애니메이션)
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScrollCloseSearch = () => {
       if (searchOpen) {
-        setClosing(true); // closing 클래스 적용
+        setClosing(true);
         setTimeout(() => {
           setSearchOpen(false);
           setClosing(false);
-        }, 300); // transition 시간과 동일
+        }, 300);
       }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScrollCloseSearch);
+    return () => window.removeEventListener('scroll', handleScrollCloseSearch);
   }, [searchOpen]);
 
   // ✅ Firebase 로그인 상태 감지
@@ -73,11 +78,9 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuOpen, loginOpen, searchOpen]);
 
-
-  // ✅ 스크롤 시 메뉴, 검색창 닫기
+  // ✅ 스크롤 시 메뉴 닫기
   useEffect(() => {
     const handleScroll = () => {
-      // 🔍 검색창 닫기
       if (searchOpen) {
         setClosing(true);
         setTimeout(() => {
@@ -85,33 +88,37 @@ const Header = () => {
           setClosing(false);
         }, 300);
       }
-
-      // 📌 메뉴 닫기
-      if (menuOpen) {
-        setMenuOpen(false);
-      }
-
-      // (선택) 로그인, about도 닫을 수 있음
-      // if (loginOpen) setLoginOpen(false);
-      // if (aboutOpen) setAboutOpen(false);
+      if (menuOpen) setMenuOpen(false);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [searchOpen, menuOpen]);  // ✅ menuOpen 꼭 추가!
+  }, [searchOpen, menuOpen]);
 
+  // ✅ 서브네비: 스크롤 방향에 따라 숨김/표시
+  useEffect(() => {
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      const lastY = lastScrollYRef.current;
+      const delta = currentY - lastY;
 
+      // 작은 흔들림 방지 임계값
+      const threshold = 4;
 
+      if (Math.abs(delta) > threshold) {
+        // 아래로 스크롤 → 숨김 / 위로 스크롤 → 표시
+        setSubnavHidden(delta > 0 && currentY > 80);
+        lastScrollYRef.current = currentY;
+      }
+    };
 
-
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // ✅ 메뉴/로그인/검색 토글
   const toggleMenu = () => setMenuOpen(prev => !prev);
   const toggleLogin = () => { setLoginOpen(prev => !prev); setIsSignup(false); setAuthError(''); };
-  const toggleSearch = () => {
-    setSearchOpen(!searchOpen);
-    setClosing(false);
-  };
+  const toggleSearch = () => { setSearchOpen(!searchOpen); setClosing(false); };
 
   const clearSearch = () => setSearchText('');
   const handleMenuLinkClick = () => { setMenuOpen(false); window.scrollTo(0, 0); };
@@ -126,49 +133,31 @@ const Header = () => {
           setAuthError('❌ 비밀번호가 일치하지 않습니다.');
           return;
         }
-
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const newUser = userCredential.user;
-
         await setDoc(doc(db, 'users', newUser.uid), {
           username,
           email: newUser.email,
           createdAt: new Date(),
         });
-
         alert('✅ 회원가입이 완료되었습니다! 로그인 후 이용하세요.');
       } else {
         await signInWithEmailAndPassword(auth, email, password);
         alert('✅ 로그인 성공!');
       }
-
       setAuthError('');
       setLoginOpen(false);
-      setUsername('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-
+      setUsername(''); setEmail(''); setPassword(''); setConfirmPassword('');
     } catch (err) {
       const code = err.code;
-      if (code === 'auth/email-already-in-use') {
-        setAuthError('⚠️ 이미 가입된 이메일입니다. 로그인 해주세요.');
-        setIsSignup(false);
-      } else if (code === 'auth/invalid-email') {
-        setAuthError('❌ 이메일 형식이 잘못되었습니다.');
-      } else if (code === 'auth/weak-password') {
-        setAuthError('❌ 비밀번호는 6자 이상이어야 합니다.');
-      } else if (code === 'auth/user-not-found') {
-        setAuthError('⚠️ 계정이 존재하지 않습니다. 회원가입 해주세요.');
-        setIsSignup(true);
-      } else if (code === 'auth/wrong-password') {
-        setAuthError('❌ 비밀번호가 틀렸습니다.');
-      } else {
-        setAuthError(`❌ 오류가 발생했습니다: ${err.message}`);
-      }
+      if (code === 'auth/email-already-in-use') { setAuthError('⚠️ 이미 가입된 이메일입니다. 로그인 해주세요.'); setIsSignup(false); }
+      else if (code === 'auth/invalid-email') setAuthError('❌ 이메일 형식이 잘못되었습니다.');
+      else if (code === 'auth/weak-password') setAuthError('❌ 비밀번호는 6자 이상이어야 합니다.');
+      else if (code === 'auth/user-not-found') { setAuthError('⚠️ 계정이 존재하지 않습니다. 회원가입 해주세요.'); setIsSignup(true); }
+      else if (code === 'auth/wrong-password') setAuthError('❌ 비밀번호가 틀렸습니다.');
+      else setAuthError(`❌ 오류가 발생했습니다: ${err.message}`);
     }
   };
-
 
   const handleLogout = async () => { await signOut(auth); alert('🚪 로그아웃 완료'); };
 
@@ -193,7 +182,6 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* ✅ 검색은 항상 보이게, 계정은 데스크톱에서만 */}
         <div className="header-right">
           <div className="account-desktop">
             {user ? (
@@ -208,7 +196,6 @@ const Header = () => {
             )}
           </div>
 
-          {/* 🔍 검색 버튼은 모바일/데스크톱 모두 노출 */}
           <button
             title="검색"
             className="icon-button search-button"
@@ -221,7 +208,7 @@ const Header = () => {
       </header>
 
       {/* 🔍 검색창 */}
-      <div className={`search-bar ${searchOpen ? "open" : closing ? "closing" : ""}`} ref={searchRef}>
+      <div className={`search-bar ${searchOpen ? 'open' : closing ? 'closing' : ''}`} ref={searchRef}>
         <FaSearch className="search-icon" />
         <input
           type="text"
@@ -234,6 +221,21 @@ const Header = () => {
         <button className="search-close" onClick={() => setSearchOpen(false)}>×</button>
       </div>
 
+      {/* ✅ 메인 페이지에서만 보이는 서브 메뉴 바 (스크롤 숨김 포함) */}
+      {location.pathname === '/' && (
+        <nav className={`subnav ${subnavHidden ? 'hide' : 'show'}`}>
+          <div className="subnav-inner">
+            <Link to="/louvre" onClick={handleMenuLinkClick}>루브르</Link>
+            <Link to="/british" onClick={handleMenuLinkClick}>대영 박물관</Link>
+            <Link to="/ermitage" onClick={handleMenuLinkClick}>에르미타주</Link>
+            <Link to="/vatican" onClick={handleMenuLinkClick}>바티칸</Link>
+            <Link to="/met" onClick={handleMenuLinkClick}>메트로폴리탄</Link>
+            <Link to="/exhibitions" onClick={handleMenuLinkClick}>특별전시</Link>
+            <Link to="/education" onClick={handleMenuLinkClick}>교육자료</Link>
+          </div>
+        </nav>
+      )}
+
       {/* 📌 사이드 메뉴 */}
       {menuOpen && (
         <div className="menu-overlay" ref={menuRef}>
@@ -242,7 +244,6 @@ const Header = () => {
           </div>
 
           <div className="menu-content">
-            {/* ✅ 모바일 전용 계정 블록 */}
             <div className="menu-account">
               {user ? (
                 <>
@@ -250,18 +251,12 @@ const Header = () => {
                     <span className="avatar">👤</span>
                     <span className="name">{userData?.username} 님</span>
                   </div>
-                  <button
-                    className="menu-logout"
-                    onClick={() => { handleLogout(); setMenuOpen(false); }}
-                  >
+                  <button className="menu-logout" onClick={() => { handleLogout(); setMenuOpen(false); }}>
                     로그아웃
                   </button>
                 </>
               ) : (
-                <button
-                  className="menu-login"
-                  onClick={() => { toggleLogin(); setMenuOpen(false); }}
-                >
+                <button className="menu-login" onClick={() => { toggleLogin(); setMenuOpen(false); }}>
                   로그인
                 </button>
               )}
@@ -274,10 +269,7 @@ const Header = () => {
               <li className="submenu"><Link to="/ermitage" onClick={handleMenuLinkClick}>에르미타주</Link></li>
               <li className="submenu"><Link to="/vatican" onClick={handleMenuLinkClick}>바티칸</Link></li>
               <li className="submenu"><Link to="/met" onClick={handleMenuLinkClick}>메트로폴리탄</Link></li>
-
-
               <li className="menu-divider" />
-
               <li><Link to="/exhibitions" onClick={handleMenuLinkClick}>특별전시</Link></li>
               <li><Link to="/education" onClick={handleMenuLinkClick}>교육자료</Link></li>
             </ul>

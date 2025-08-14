@@ -53,6 +53,7 @@ function App() {
             <Route path="/ermitage" element={<Ermitage />} />
             <Route path="/vatican" element={<Vatican />} />
             <Route path="/met" element={<Met />} />
+            <Route path="/:museum/artwork/:id" element={<ArtworkDetail />} />
             {/* <Route path="/about" element={<About />} /> */}
             <Route path="/:museum/artwork/:id" element={<ArtworkDetail />} />
             <Route path="/education" element={<Education />} />

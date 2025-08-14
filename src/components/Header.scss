@@ -361,6 +361,65 @@ body {
 
 
 
+/* === 서브 내비게이션 바 === */
+.subnav {
+  position: sticky;          /* 헤더 바로 아래에 붙음 */
+  top: 60px;                 /* 네 헤더 높이에 맞게 조정(예: 60px) */
+  z-index: 90;
+  background: #f3f2ef;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+
+  /* ✨ 공간 없이 접히도록: 높이/패딩/테두리를 함께 애니메이션 */
+  overflow: hidden;
+  max-height: 80px;          /* 한 줄 메뉴 기준 충분한 값 */
+  padding-block: 10px;       /* = padding-top/bottom */
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    max-height .22s ease,
+    padding-block .22s ease,
+    opacity .18s ease;
+
+  &.hide {
+    max-height: 0;           /* 완전히 접어서 공간 제거 */
+    padding-block: 0;        /* 패딩 제거 → ‘큰 공간’ 사라짐 */
+    opacity: 0;              /* 부드럽게 페이드아웃 */
+    border-bottom: 0;        /* 얇은 라인까지 접기 */
+  }
+
+  .subnav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-inline: 16px;
+
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;   /* ✅ 글자(링크) 가운데 정렬 */
+    flex-wrap: wrap;           /* 좁을 때 줄바꿈 */
+
+    a {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2F3837;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: transform .15s ease, background-color .15s ease, color .15s ease;
+
+      &:hover { background: #e7e3dc; transform: translateY(-1px); }
+      &:active { transform: translateY(0); }
+      &.active { background: #2F3837; color: #fff; }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .subnav {
+    display: none;
+  }
+  
+}
 
 
 

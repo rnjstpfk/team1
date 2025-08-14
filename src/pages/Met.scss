@@ -50,3 +50,60 @@
   background: rgba(0,0,0,0.35);
   color: red;
 }
+
+
+
+
+
+//로딩/버튼
+.page-loading { text-align:center; padding:16px; color:#555; }
+.page-error   { text-align:center; padding:16px; color:#b00020; white-space:pre-line; }
+.page-end     { text-align:center; padding:24px; color:#666; }
+
+.infinite-footer {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.load-more {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid #2f3837;
+  background: #fff;
+  color: #2f3837;
+  cursor: pointer;
+  transition: background .15s, color .15s, transform .1s;
+  &:hover  { background:#2f3837; color:#fff; }
+  &:active { transform: translateY(1px); }
+}
+
+
+
+/* 스켈레톤 카드 */
+.gallery .galleryItem.skeleton {
+  .image-wrapper.skeleton-box {
+    width: 100%;
+    padding-top: 66%;
+    border-radius: 8px;
+    background: linear-gradient(90deg,#ececec 25%,#f5f5f5 37%,#ececec 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.2s infinite;
+  }
+  .skeleton-line {
+    height: 14px;
+    margin-top: 10px;
+    border-radius: 6px;
+    background: linear-gradient(90deg,#ececec 25%,#f5f5f5 37%,#ececec 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.2s infinite;
+
+    &.short { width: 60%; }
+  }
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
